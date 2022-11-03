@@ -4,7 +4,7 @@ name: Follow Job
     branches:
       - test-run
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "0/15 * * * *"
 
 jobs:
   run_follow_job:
