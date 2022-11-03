@@ -52,6 +52,9 @@ const generateSpacha = async (tweet, author) => {
     devlog(homeTimeline.rateLimit);
     const tweet = tweets[getRandomInt(0, tweets.length)];
     devlog(tweet);
+    if (!tweet) {
+        process.exit(0);
+    }
     const spachaBuf = await generateSpacha(tweet, homeTimeline.includes.author(tweet));
 
     const mediaId = await client.v1.uploadMedia(spachaBuf, { mimeType: EUploadMimeType.Png });
