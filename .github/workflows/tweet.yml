@@ -7,14 +7,11 @@ name: Tweet Job
     - cron: "*/5 * * * *"
 
 jobs:
-  run_bb_job:
+  run_tweet_job:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: npm i
-      - uses: szenius/set-timezone@v1.0
-        with:
-          timezoneLinux: "Asia/Tokto"
       - run: node app
         env:
           TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
