@@ -46,7 +46,7 @@ const generateSpacha = async (tweet, author) => {
 }
 
 (async () => {
-    const homeTimeline = await client.v2.homeTimeline({ exclude: ['replies', "retweets"], max_results: 10, expansions: ["author_id"], "user.fields": ["name", "profile_image_url", "id", "protected"] });
+    const homeTimeline = await client.v2.homeTimeline({ exclude: ['replies', "retweets"], max_results: 100, expansions: ["author_id"], "user.fields": ["name", "profile_image_url", "id", "protected"] });
     const tweets = homeTimeline.tweets.filter(v => v.author_id !== process.env.BOT_ID)
     devlog(tweets);
     devlog(homeTimeline.rateLimit);
