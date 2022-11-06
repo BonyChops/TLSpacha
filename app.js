@@ -29,7 +29,7 @@ const generateSpacha = async (tweet, author) => {
     const canvas = new Canvas.Canvas(600, 300);
     const ctx = canvas.getContext("2d");
     const iconImg = new Image;
-    iconImg.src = author.protected ? process.env.DEFAULT_ICON : author.profile_image_url;
+    iconImg.src = author.protected ? process.env.DEFAULT_ICON : author.profile_image_url.replace("_normal", "");
     await new Promise((resolve) => { iconImg.onload = resolve });
     devlog(author);
     const text = tweet.text.replaceAll("\n", " ");
