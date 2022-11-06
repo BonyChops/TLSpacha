@@ -32,12 +32,13 @@ const generateSpacha = async (tweet, author) => {
     iconImg.src = author.protected ? process.env.DEFAULT_ICON : author.profile_image_url;
     await new Promise((resolve) => { iconImg.onload = resolve });
     devlog(author);
+    const text = tweet.text.replaceAll("\n", " ");
     new SpachaImage(ctx, {
         user: {
             name: author.protected ? "一般ユーザー" : author.name,
             img: iconImg
         },
-        message: (tweet.text.replaceAll("\n", " "))
+        message: author.protected ? text.replaceAll(author.username, "一般ユーザー") : text
     });
 
     const b64 = canvas.toDataURL().split(",")[1];
@@ -46,7 +47,7 @@ const generateSpacha = async (tweet, author) => {
 }
 
 (async () => {
-    const homeTimeline = await client.v2.homeTimeline({ exclude: ['replies', "retweets"], max_results: 100, expansions: ["author_id"], "user.fields": ["name", "profile_image_url", "id", "protected"] });
+    const homeTimeline = await client.v2.homeTimeline({ exclude: ['replies', "retweets"], max_results: 100, expansions: ["author_id"], "user.fields": ["name", "profile_image_url", "id", "protected", "username"] });
     const tweets = homeTimeline.tweets.filter(v => v.author_id !== process.env.BOT_ID)
     devlog(tweets);
     devlog(homeTimeline.rateLimit);
