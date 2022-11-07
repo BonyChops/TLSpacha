@@ -32,7 +32,7 @@ const generateSpacha = async (tweet, author) => {
     iconImg.src = author.protected ? process.env.DEFAULT_ICON : author.profile_image_url.replace("_normal", "");
     await new Promise((resolve) => { iconImg.onload = resolve });
     devlog(author);
-    const text = tweet.text.replaceAll("\n", " ");
+    const text = tweet.text;
     new SpachaImage(ctx, {
         user: {
             name: author.protected ? "一般ユーザー" : author.name,
