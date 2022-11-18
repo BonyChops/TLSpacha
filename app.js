@@ -3,6 +3,7 @@ const { TwitterApi, EUploadMimeType } = require("twitter-api-v2");
 const Canvas = require("canvas");
 const Image = Canvas.Image;
 const { SpachaImage } = require("spacha");
+const { findKanjiNumbers, kanji2number } = require('@geolonia/japanese-numeral');
 
 const getRandomInt = (min, max) => {
     min = Math.ceil(min);
@@ -33,7 +34,13 @@ const generateSpacha = async (tweet, author) => {
     await new Promise((resolve) => { iconImg.onload = resolve });
     devlog(author);
     const text = tweet.text;
+    devlog(text);
+    const numbers = [...(text.match(/[0-9.,]+/g) ?? []), ...findKanjiNumbers(text).map(v => kanji2number(v))].filter(v => !isNaN(v)).map(v => Number(v));
+    numbers.sort((a, b) => b - a);
+    devlog(numbers);
+    devlog(numbers[0]);
     new SpachaImage(ctx, {
+        price: numbers[0],
         user: {
             name: author.protected ? "一般ユーザー" : author.name,
             img: iconImg
@@ -51,12 +58,16 @@ const generateSpacha = async (tweet, author) => {
     const tweets = homeTimeline.tweets.filter(v => v.author_id !== process.env.BOT_ID)
     devlog(tweets);
     devlog(homeTimeline.rateLimit);
-    const tweet = tweets[getRandomInt(0, tweets.length)];
+    const tweet = process.env.TWEET_ID ? tweets.find(v => v.id === process.env.TWEET_ID) : tweets[getRandomInt(0, tweets.length)];
     devlog(tweet);
     if (!tweet) {
         process.exit(0);
     }
     const spachaBuf = await generateSpacha(tweet, homeTimeline.includes.author(tweet));
+
+    if (process.env.MODE === "test") {
+        process.exit(0);
+    }
 
     const mediaId = await client.v1.uploadMedia(spachaBuf, { mimeType: EUploadMimeType.Png });
 

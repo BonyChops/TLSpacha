@@ -10,6 +10,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@geolonia/japanese-numeral": "^0.1.16",
     "canvas": "^2.10.2",
     "dotenv": "^16.0.3",
     "spacha": "^1.0.8",
