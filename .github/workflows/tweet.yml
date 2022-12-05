@@ -4,7 +4,7 @@ name: Tweet Job
     branches:
       - test-run
   schedule:
-    - cron: "0/5 * * * *"
+    - cron: "0 * * * *"
 
 jobs:
   run_tweet_job:
