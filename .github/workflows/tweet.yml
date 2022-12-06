@@ -2,7 +2,7 @@ name: Tweet Job
 "on":
   push:
     branches:
-      - test-run
+      - main
   schedule:
     - cron: "0 * * * *"
 
