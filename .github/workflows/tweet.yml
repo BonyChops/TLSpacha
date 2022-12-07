@@ -2,9 +2,9 @@ name: Tweet Job
 "on":
   push:
     branches:
-      - test-run
+      - main
   schedule:
-    - cron: "0/5 * * * *"
+    - cron: "0 * * * *"
 
 jobs:
   run_tweet_job:
@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: 16
       - run: sudo apt install -y fonts-noto-cjk
-      - run: npm i
+      - run: npm ci
       - run: node app
         env:
           TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
