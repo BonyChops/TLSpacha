@@ -36,7 +36,7 @@ const generateSpacha = async (tweet, author) => {
     const text = tweet.text;
     devlog(text);
     devlog((text.match(/[0-9.,]+/g)));
-    const numbers = [...(text.match(/[\-0-9.,]+/g) ?? []), ...findKanjiNumbers(text).map(v => kanji2number(v))].map(v => v.replaceAll(",", "")).filter(v => !isNaN(v)).map(v => Number(v));
+    const numbers = [...(text.match(/[\-0-9.,]+/g) ?? []).map(v => v.replaceAll(",", "")), ...findKanjiNumbers(text).map(v => kanji2number(v))].filter(v => !isNaN(v)).map(v => Number(v));
     numbers.sort((a, b) => b - a);
     devlog(numbers);
     devlog(numbers[0]);
