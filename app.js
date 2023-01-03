@@ -13,7 +13,7 @@ const getRandomInt = (min, max) => {
 
 const devlog = (data) => {
     if (process.env.DEV === "TRUE") {
-        console.log(data);
+        console.dir(data, {depth: 4});
     }
 }
 
@@ -55,11 +55,12 @@ const generateSpacha = async (tweet, author) => {
 }
 
 (async () => {
-    const homeTimeline = await client.v2.homeTimeline({ exclude: ['replies', "retweets"], max_results: 100, expansions: ["author_id"], "user.fields": ["name", "profile_image_url", "id", "protected", "username"] });
+    const homeTimeline = await client.v2.homeTimeline({ exclude: ['replies', "retweets"], max_results: 100, expansions: ["author_id", "attachments.media_keys"], "user.fields": ["name", "profile_image_url", "id", "protected", "username"], "tweet.fields": ["entities"] });
     const tweets = homeTimeline.tweets.filter(v => v.author_id !== process.env.BOT_ID)
     devlog(tweets);
     devlog(homeTimeline.rateLimit);
     const tweet = process.env.TWEET_ID ? tweets.find(v => v.id === process.env.TWEET_ID) : tweets[getRandomInt(0, tweets.length)];
+    tweet.text = tweet.entities?.urls ? tweet.entities.urls.reduce((acc, val) => (acc.replaceAll(val.url, val.expanded_url)), tweet.text) : tweet.text;
     devlog(tweet);
     if (!tweet) {
         process.exit(0);
